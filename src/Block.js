@@ -2,7 +2,6 @@ class Block
 {
     constructor(pattern, board) {
         isBugged();
-        // console.info(pattern);
         this.x = 4;
         this.y = 0;
         this.board = board;
@@ -50,8 +49,6 @@ class Block
                 str += "\n";
             }
         }
-
-        // console.info(str);
     }
 
     getRotation() {
@@ -60,20 +57,10 @@ class Block
 
     show() {
         let shape = this.getRotation();
-        stroke(0);
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
-                // fill('rgba(255, 255, 50, 0.25)');
-                // if (x === 0 && y === 0) {
-                //     fill('rgba(200, 150, 150, 0.5)');
-                //     rect(this.x * blockSize, this.y * blockSize, blockSize, blockSize);
-                // }
-
                 if (shape[y][x] === 1) {
                     fill(this.color);
-                    // textAlign(CENTER, CENTER);
-                    // fill(255);
-                    // text(y + ":" + x, ((x + this.x) * blockSize) + blockSize / 2, ((y + this.y) * blockSize) + blockSize / 2);
                     rect((x + this.x) * blockSize, (y + this.y) * blockSize, blockSize, blockSize);
                 }
             }
@@ -114,19 +101,15 @@ class Block
             for (let x = 0; x < pattern[y].length; x++) {
                 if (pattern[y][x] !== 0) {
                     if (x + bX + direction[0] < 0 || cols - 1 < x + bX + direction[0]) {
-                        // console.info("Out of X");
                         return false;
                     }
 
                     if (rows - 1 < y + bY + direction[1]) {
-                        // console.info("Out of Y");
                         return false;
                     }
 
                     let indexY = (y + bY + direction[1]) < 0 ? 0 : (y + bY + direction[1]);
-                    // console.info(x + bY + direction[1], bX + direction[0], this.board.board[indexY][bX + direction[0]]);
                     if (this.board.board[indexY][x + bX + direction[0]] !== 0) {
-                        // console.info("Hit block");
                         return false;
                     }
                 }

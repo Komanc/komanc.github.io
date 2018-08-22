@@ -10,14 +10,8 @@ let pressed = false;
 let direction = [0, 1];
 let strRow;
 let strBoard;
-let debug = false;
 let nextBlock;
 let score = 0;
-
-console.tetris = {};
-console.tetris.debug = function() {
-    debug && console.debug(...arguments);
-};
 
 function setup() {
     let wWidth = blockSize * cols + 300;
@@ -31,6 +25,11 @@ function setup() {
         "011 110 000",
         "010 111 000",
         "11 11",
+        // Rozsirena sada
+        // "11 00",
+        // "000 111 000",
+        // "1",
+        // "111 010 010",
     ];
 
     createCanvas(wWidth, wHeight);
@@ -68,18 +67,14 @@ function draw() {
         if (block.check([0, 1])) {
             block.move([0, 1]);
         } else {
-            // block.freeze = true;
             board.save(block);
             board.checkRows();
             block = newBlock();
         }
     }
-
 }
 
 function keyPressed() {
-    // let direction = [0, 0];
-
     if (keyCode === LEFT_ARROW) {
         direction = [-1, 0];
         pressed = true;
