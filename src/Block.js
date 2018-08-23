@@ -56,6 +56,7 @@ class Block
     }
 
     show() {
+        stroke(1);
         let shape = this.getRotation();
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {

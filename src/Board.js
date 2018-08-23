@@ -17,6 +17,7 @@ class Board
     }
 
     show() {
+        stroke(1);
         for (let y = 0; y < this.rows; y++) {
             for (let x = 0; x < this.cols; x++) {
                 fill(255);
