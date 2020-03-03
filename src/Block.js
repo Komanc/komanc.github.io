@@ -55,6 +55,11 @@ class Block
         return this.shapes[this.rotation];
     }
 
+    placeOnStart() {
+        this.x = 4;
+        this.y = 0;
+    }
+
     show() {
         stroke(1);
         let shape = this.getRotation();
