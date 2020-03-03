@@ -11,11 +11,8 @@ let direction = [0, 1];
 let strRow;
 let strBoard;
 let nextBlock;
-let blockQueue;
 let score = 0;
 let paused = false;
-
-let counter = 0;
 
 function setup() {
     let wWidth = blockSize * cols + 300;
@@ -38,25 +35,26 @@ function setup() {
 
     createCanvas(wWidth, wHeight);
     board = new Board(rows, cols);
-    blockQueue = new BlockQueue(2);
-    block = blockQueue.nextBlock();
-    nextBlock = blockQueue.nextBlock();
+    block = newBlock();
 }
 
 function draw() {
+    background(255);
+
     isBugged();
 
-    background(255);
     board.show();
-    // debugger
+
     block.show();
 
-    blockQueue.show();
+    nextBlock.x = cols + 2;
+    nextBlock.y = 1;
+    nextBlock.show();
 
     fill(0);
-
+    
     textSize(24);
-    text(score, (cols + 2) * blockSize, blockSize);
+    text(score, (cols + 2) * blockSize, 6 *blockSize);
 
     if (paused) {
         writeOverlay("Pauza");
@@ -77,8 +75,7 @@ function draw() {
         } else {
             board.save(block);
             board.checkRows();
-            block = blockQueue.nextBlock();
-            block.placeOnStart();
+            block = newBlock();
         }
     }
 }
@@ -149,4 +146,14 @@ function writeOverlay(msg) {
     strokeWeight(1);
     stroke(0);
     textAlign(LEFT, BASELINE);
+}
+
+function newBlock() {
+    block = nextBlock || new Block(random(patterns), board);
+    nextBlock = new Block(random(patterns), board);
+
+    block.x = 4;
+    block.y = 0;
+
+    return block;
 }
