@@ -1,10 +1,12 @@
 let block;
 let board;
 
-let blockSize = 40;
+
 let cols = 10;
 let rows = 24;
+let blockSize = (window.innerHeight / rows) - 1;
 let patterns;
+let offsetScreen = 0;//window.innerWidth / 4;
 
 let pressed = false;
 let direction = [0, 1];
@@ -33,13 +35,17 @@ function setup() {
         // "111 010 010",
     ];
 
-    createCanvas(wWidth, wHeight);
+    createCanvas(window.innerWidth, wHeight);
+    newGame();
+}
+
+function newGame() {
     board = new Board(rows, cols);
     block = newBlock();
 }
 
 function draw() {
-    background(255);
+    background(240);
 
     isBugged();
 
@@ -53,11 +59,11 @@ function draw() {
 
     fill(0);
     
-    textSize(24);
-    text(score, (cols + 2) * blockSize, 6 *blockSize);
+    textSize(blockSize);
+    text('Score: ' + score, (cols + 2) * blockSize + offsetScreen, 6 * blockSize);
 
     if (paused) {
-        writeOverlay("Pauza");
+        writeOverlay("Pauza\npro novou hru\nstiskni Enter");
         return;
     }
 
@@ -108,6 +114,21 @@ function keyPressed() {
             loop();
         } else {
             noLoop();
+        }
+    }
+
+    if (keyCode === 13) {
+        paused = !paused;
+        if (!paused) {
+            loop();
+        } else {
+            noLoop();
+        }
+
+        if (window.confirm("Zahájit novou hru?")) {
+            newGame();
+            paused = false;
+            loop();
         }
     }
 }

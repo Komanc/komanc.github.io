@@ -17,16 +17,16 @@ class Board
     }
 
     show() {
-        stroke(1);
+        stroke(220);
         for (let y = 0; y < this.rows; y++) {
             for (let x = 0; x < this.cols; x++) {
                 fill(255);
 
                 if (this.board[y][x] !== 0) {
-                    fill(200, 200, 0);
+                    fill(200, 0, 0);
                 }
 
-                rect(x * blockSize, y * blockSize, blockSize, blockSize);
+                rect((x * blockSize) + offsetScreen, y * blockSize, blockSize-1, blockSize-1);
             }
         }
         isBugged();

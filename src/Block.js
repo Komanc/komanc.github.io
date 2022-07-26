@@ -62,12 +62,13 @@ class Block
 
     show() {
         stroke(1);
+        noStroke();
         let shape = this.getRotation();
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
                 if (shape[y][x] === 1) {
                     fill(this.color);
-                    rect((x + this.x) * blockSize, (y + this.y) * blockSize, blockSize, blockSize);
+                    rect((x + this.x) * blockSize + offsetScreen, (y + this.y) * blockSize, blockSize-1, blockSize-1);
                 }
             }
         }
