@@ -52,13 +52,10 @@ function setup() {
 function newGame() {
     board = new Board(rows, cols);
     let index = Math.floor(random(patterns.length));
-    console.info("Index1", index, patterns[index]);
     nextBlock[0] = new Block(patterns[index], board, index);
     index = Math.floor(random(patterns.length));
-    console.info("Index2", index, patterns[index]);
     nextBlock[1] = new Block(patterns[index], board, index);
     index = Math.floor(random(patterns.length));
-    console.info("Index3", index, patterns[index]);
     nextBlock[2] = new Block(patterns[index], board, index);
     block = newBlock();
 }

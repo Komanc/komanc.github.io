@@ -102,16 +102,11 @@ class Block
     }
 
     swap() {
-        console.info("SWAP");
-        console.info("patternIndex", this.patternIndex);
         if (!possibleSwaps[this.patternIndex]) {
-            console.log("Neni co swapnout", this.patternIndex, possibleSwaps[this.patternIndex])
              return;
         }
 
-        console.log("Swapnu ", this.patternIndex, " za ", possibleSwaps[this.patternIndex]);
         this.patternIndex = possibleSwaps[this.patternIndex];
-        console.info("Novy pattern index", this.patternIndex);
         this.createShape(patterns[this.patternIndex]);
     }
 
