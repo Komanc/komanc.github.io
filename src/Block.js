@@ -1,22 +1,26 @@
 class Block
 {
-    constructor(pattern, board) {
+    constructor(pattern, board, patternIndex) {
         isBugged();
         this.x = 4;
         this.y = 0;
         this.board = board;
+        this.patternIndex = patternIndex;
 
         this.rotation = 0;
 
-        this.shapes = [];
-
         this.color = color(random(100,200), random(100,200), random(100,200));
 
+        this.createShape(pattern);
+    }
+
+    createShape(pattern) {
+        this.shapes = [];
         let shape = pattern.replace(/\s+/g, "");
 
         let s = [];
         let n = Math.sqrt(shape.length);
-        
+
         for (let i = 0; i < n; i++) {
             s[i] = [];
             for (let j = 0; j < n; j++) {
@@ -60,7 +64,7 @@ class Block
         this.y = 0;
     }
 
-    show() {
+    show(blockSizeRatio = 1) {
         stroke(1);
         noStroke();
         let shape = this.getRotation();
@@ -95,6 +99,20 @@ class Block
             this.rotation++;
         }
         isBugged();
+    }
+
+    swap() {
+        console.info("SWAP");
+        console.info("patternIndex", this.patternIndex);
+        if (!possibleSwaps[this.patternIndex]) {
+            console.log("Neni co swapnout", this.patternIndex, possibleSwaps[this.patternIndex])
+             return;
+        }
+
+        console.log("Swapnu ", this.patternIndex, " za ", possibleSwaps[this.patternIndex]);
+        this.patternIndex = possibleSwaps[this.patternIndex];
+        console.info("Novy pattern index", this.patternIndex);
+        this.createShape(patterns[this.patternIndex]);
     }
 
     check(direction, rotation) {

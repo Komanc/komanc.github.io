@@ -2,7 +2,7 @@ let block;
 let board;
 
 
-let cols = 10;
+let cols = 9;
 let rows = 24;
 let blockSize = (window.innerHeight / rows) - 1;
 let patterns;
@@ -12,7 +12,7 @@ let pressed = false;
 let direction = [0, 1];
 let strRow;
 let strBoard;
-let nextBlock;
+let nextBlock = [];
 let score = 0;
 let paused = false;
 
@@ -35,12 +35,31 @@ function setup() {
         // "111 010 010",
     ];
 
+    possibleSwaps = {
+        0: null,
+        1: 2,
+        2: 1,
+        3: 4,
+        4: 3,
+        5: null,
+        6: null
+    };
+
     createCanvas(window.innerWidth, wHeight);
     newGame();
 }
 
 function newGame() {
     board = new Board(rows, cols);
+    let index = Math.floor(random(patterns.length));
+    console.info("Index1", index, patterns[index]);
+    nextBlock[0] = new Block(patterns[index], board, index);
+    index = Math.floor(random(patterns.length));
+    console.info("Index2", index, patterns[index]);
+    nextBlock[1] = new Block(patterns[index], board, index);
+    index = Math.floor(random(patterns.length));
+    console.info("Index3", index, patterns[index]);
+    nextBlock[2] = new Block(patterns[index], board, index);
     block = newBlock();
 }
 
@@ -53,9 +72,23 @@ function draw() {
 
     block.show();
 
-    nextBlock.x = cols + 2;
-    nextBlock.y = 1;
-    nextBlock.show();
+    nextBlock[0].x = cols + 2;
+    nextBlock[0].y = 1;
+    nextBlock[0].show();
+
+    nextBlock[1].x = (cols * 2) + 15 + offsetScreen;
+    nextBlock[1].y = 2;
+    push();
+    scale(0.5);
+    nextBlock[1].show(0.5);
+    pop();
+
+    nextBlock[2].x = (cols * 2) + 15 + 5 + offsetScreen ;
+    nextBlock[2].y = 2;
+    push();
+    scale(0.5);
+    nextBlock[2].show(0.5);
+    pop();
 
     fill(0);
     
@@ -87,6 +120,7 @@ function draw() {
 }
 
 function keyPressed() {
+    console.info(keyCode);
     if (keyCode === LEFT_ARROW) {
         direction = [-1, 0];
         pressed = true;
@@ -107,6 +141,11 @@ function keyPressed() {
         direction = [0, 1];
         pressed = true;
     }
+
+    if (keyCode === SHIFT) {
+        block.swap();
+    }
+
 
     if (keyCode === 32) {
         paused = !paused;
@@ -170,8 +209,15 @@ function writeOverlay(msg) {
 }
 
 function newBlock() {
-    block = nextBlock || new Block(random(patterns), board);
-    nextBlock = new Block(random(patterns), board);
+    let index = Math.floor(random(patterns.length));
+    block = nextBlock[0] || new Block(patterns[index], board, index);
+    index = Math.floor(random(patterns.length));
+    nextBlock[0] = nextBlock[1] || new Block(patterns[index], board, index);
+    index = Math.floor(random(patterns.length));
+    nextBlock[1] = nextBlock[2] || new Block(patterns[index], board, index);
+    index = Math.floor(random(patterns.length));
+    nextBlock[2] = new Block(patterns[index], board, index);
+
 
     block.x = 4;
     block.y = 0;
