@@ -45,7 +45,7 @@ let col2 = 2;
 
 
 function draw() {
-    if (frameCount % 50 !== 0) {
+    if (frameCount % 100 !== 0) {
         return;
     }
     background(240);
