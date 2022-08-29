@@ -13,6 +13,12 @@ let y = 100;
 let blockSize = 100;
 let index;
 
+let row1;
+let col1;
+
+let row2;
+let col2;
+
 function setup() {
     pattern = "011010010";
     row = 0;
@@ -34,18 +40,20 @@ function setup() {
         }
     }
 
+    row1 = 0;
+    col1 = 0;
+
+    row2 = 0;
+    col2 = size - 1;
+
     createCanvas(window.innerWidth, window.innerHeight);
 }
 
-let row1 = 0;
-let col1 = 0;
 
-let row2 = 0;
-let col2 = 2;
 
 
 function draw() {
-    // if (frameCount % 100 !== 0) {
+    // if (frameCount % 5 !== 0) {
     //     return;
     // }
     background(240);
@@ -162,7 +170,7 @@ function draw() {
     if (row2 >= size) {
         col2--;
         if (col2 < 0) {
-            col2 = 2;
+            col2 = size - 1;
         }
         row2 = 0;
     }
@@ -171,6 +179,13 @@ function draw() {
     index++;
     if (index >= pattern.length) {
         index = 0;
+        shapeArray = structuredClone(rotatedShapeArray);
+        for (let row = 0; row < size; row++) {
+            rotatedShapeArray[row] = [];
+            for (let col = 0; col < size; col++) {
+                rotatedShapeArray[row][col] = 0;
+            }
+        }
     }
     noLoop();
 }
