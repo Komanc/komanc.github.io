@@ -67,11 +67,11 @@ function draw() {
 
     let infoMessage;
     if (patternShape[index] === "0") {
-        infoMessage = "V originální mřížce bude práždné (bílé) pole\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník] = posun na další krok.";
+        infoMessage = "V originální mřížce bude práždné (bílé) pole\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník]/klepnutí = posun na další krok.";
     }
 
     if (patternShape[index] === "1") {
-        infoMessage = "V originální mřížce bude plné (červené pole)\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník] = posun na další krok.";
+        infoMessage = "V originální mřížce bude plné (červené pole)\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník]/klepnutí = posun na další krok.";
     }
 
     textSize(20);
@@ -132,7 +132,7 @@ function draw() {
         }
     }
 
-    text("Orotovaný\n(spodní souřadnice značí souřadnice v púvodní mřižce)", x + 500 + blockSize * 1.5, y + 50 + 3 * blockSize);
+    text("Orotovaný\n(spodní souřadnice značí souřadnice\nv původní mřižce)", x + 500 + blockSize * 1.5, y + 50 + 3 * blockSize);
 
 
     strokeWeight(3);
