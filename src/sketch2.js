@@ -45,12 +45,13 @@ let col2 = 2;
 
 
 function draw() {
-    if (frameCount % 100 !== 0) {
-        return;
-    }
+    // if (frameCount % 100 !== 0) {
+    //     return;
+    // }
     background(240);
     let patternShape = pattern.replace(/\s+/g, "");
-    for (let i = 0; i < patternShape.length; i++) {
+    let i;
+    for (i = 0; i < patternShape.length; i++) {
         noStroke();
         textSize(50);
         fill(0)
@@ -64,6 +65,22 @@ function draw() {
         text(patternShape[i], 50 + i * 50, 50);
     }
 
+    let infoMessage;
+    if (patternShape[index] === "0") {
+        infoMessage = "V originální mřížce bude práždné (bílé) pole\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník] = posun na další krok.";
+    }
+
+    if (patternShape[index] === "1") {
+        infoMessage = "V originální mřížce bude plné (červené pole)\nDo orotované mřížky na posunutou pozici zkopíruje hodnotu z originální mřížky.\n\n[Mezerník] = posun na další krok.";
+    }
+
+    textSize(20);
+    fill(0,0,255);
+    text(infoMessage, 500, 600);
+
+    textSize(20);
+    fill(0,0,255);
+    text("<= Předpis tvaru", 140 + i * 50, 50);
 
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
@@ -88,6 +105,8 @@ function draw() {
         }
     }
 
+    text("Originál\n(předpis přetransformovaný na mřížku)", x + blockSize * 1.5, y + 50 + 3 * blockSize);
+
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
             fill(255);
@@ -106,14 +125,20 @@ function draw() {
             textAlign(CENTER);
             noStroke();
             fill(0,0,255);
-            text(row + "," + col, x + 500 + (col * blockSize) + blockSize * 0.5, (y + (row * blockSize) + blockSize * 0.5) + 6);
+            text(row + "," + col, x + 500 + (col * blockSize) + blockSize * 0.5, (y + (row * blockSize) + blockSize * 0.5) - 12);
+            fill(0, 0, 255, 50);
+            text((size - col - 1) + "," + (row), x + 500 + (col * blockSize) + blockSize * 0.5, (y + (row * blockSize) + blockSize * 0.8) + 6);
+            fill(0,0,255);
         }
     }
+
+    text("Orotovaný\n(spodní souřadnice značí souřadnice v púvodní mřižce)", x + 500 + blockSize * 1.5, y + 50 + 3 * blockSize);
 
 
     strokeWeight(3);
     stroke(125);
-    line(x + (col1 * blockSize) + blockSize * 0.5, y + (row1 * blockSize) + blockSize * 0.8, x + 500 + (col2 * blockSize) + blockSize * 0.5, y + (row2 * blockSize) + blockSize * 0.8);
+    line(50 + index * 50, 55, x + (col1 * blockSize) + blockSize * 0.5, y + (row1 * blockSize) + blockSize * 0.2);
+    line(x + (col1 * blockSize) + blockSize * 0.5, y + (row1 * blockSize) + blockSize * 0.8, x + 500 + (col2 * blockSize) + blockSize * 0.5, y + (row2 * blockSize) + blockSize * 0.5);
     fill(255);
     if (shapeArray[row1][col1] === "1") {
         fill(255,0,0);
@@ -121,6 +146,8 @@ function draw() {
     ellipse(x + (col1 * blockSize) + blockSize * 0.5, y + (row1 * blockSize) + blockSize * 0.8, 20);
     // ellipse(x + 500 + (col2 * blockSize) + blockSize * 0.5, y + (row2 * blockSize) + blockSize * 0.8, 20);
     rotatedShapeArray[row2][col2] = shapeArray[row1][col1];
+
+
 
     col1++;
     if (col1 >= size) {
@@ -145,7 +172,7 @@ function draw() {
     if (index >= pattern.length) {
         index = 0;
     }
-    // noLoop();
+    noLoop();
 }
 
 function keyPressed() {
@@ -201,6 +228,10 @@ function keyPressed() {
             loop();
         }
     }
+}
+
+function mouseClicked() {
+    loop();
 }
 
 function keyReleased() {
