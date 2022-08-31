@@ -72,7 +72,7 @@ class Block
     }
 
     /**
-     * Nakresli blok na hrai plochu.
+     * Nakresli blok na hraci plochu.
      */
     show() {
         stroke(1);
