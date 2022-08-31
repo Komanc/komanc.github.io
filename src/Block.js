@@ -6,6 +6,7 @@ class Block
         this.y = 0;
         this.board = board;
         this.patternIndex = patternIndex;
+        this.shapes = [];
 
         this.rotation = 0;
 
@@ -14,57 +15,66 @@ class Block
         this.createShape(pattern);
     }
 
+    /**
+     * Prevede vzor tvaru na mrizku a vypocita mrizky moznych rotaci tvaru.
+     *
+     * Predany vzor tvaru musi odpovidat formatu "r1r1 r2r2", kde pocet skupin musi odpovidat poctu znaku ve skupine.
+     * Napriklad tvar kosticky bude zapsan jako "11 11", tvar "T" jako "000 111 010".
+     *
+     * Tvar muze byt pro prehlednost zapsan viceradkove. Napriklad tvar "T" jako
+     * <pre>
+     * const shapeT = "000" +
+     *                "111" +
+     *                "010";
+     * </pre>
+     * @param pattern vzor tvaru ve formatu "r1r1 r2r2"
+     * @returns {void}
+     */
     createShape(pattern) {
         this.shapes = [];
-        let shape = pattern.replace(/\s+/g, "");
+        let shapePattern = pattern.replace(/\s+/g, "");
 
-        let s = [];
-        let n = Math.sqrt(shape.length);
+        let shape = [];
+        let n = Math.sqrt(shapePattern.length);
 
         for (let i = 0; i < n; i++) {
-            s[i] = [];
+            shape[i] = [];
             for (let j = 0; j < n; j++) {
-                s[i][j] = parseInt(shape[j + i * n]);
+                shape[i][j] = parseInt(shapePattern[j + i * n]);
             }
         }
 
-        this.shapes.push(s);
+        this.shapes.push(shape);
 
-        let t;
+        // Vypocita mozne rotace bloku
+        let rotatedShape;
         for (let r = 0; r < 3; r++) {
-            t = [];
+             rotatedShape = [];
             for (let i = 0; i < n; i++) {
-                t[i] = [];
+                rotatedShape[i] = [];
                 for (let j = 0; j < n; j++) {
-                    t[i][j] = s[parseInt(n - j - 1)][i]
+                    rotatedShape[i][j] = shape[n - j - 1][i];
                 }
             }
-            s = t.slice(0);
-            this.shapes.push(s);
-        }
 
-        let str = "";
-        for (let s = 0; s < this.shapes.length; s++) {
-            str += "\n";
-            for (let i = 0; i < this.shapes[s].length; i++) {
-                for (let j = 0; j < this.shapes[s][i].length; j++) {
-                    str += this.shapes[s][i][j];
-                }
-                str += "\n";
-            }
+            shape = rotatedShape.slice(0);
+            this.shapes.push(shape);
         }
     }
 
+    /**
+     * Vrati tvar v momentalne nastavene rotaci.
+     *
+     * @returns {*}
+     */
     getRotation() {
         return this.shapes[this.rotation];
     }
 
-    placeOnStart() {
-        this.x = 4;
-        this.y = 0;
-    }
-
-    show(blockSizeRatio = 1) {
+    /**
+     * Nakresli blok na hrai plochu.
+     */
+    show() {
         stroke(1);
         noStroke();
         let shape = this.getRotation();
@@ -79,11 +89,21 @@ class Block
         isBugged();
     }
 
+    /**
+     * Posune blok na novou pozici.
+     *
+     * @param direction pole s velikosti posunu ve smeru x (prvni pozice v poli) a y (druha pozice v poli),
+     */
     move(direction) {
         this.x += direction[0];
         this.y += direction[1];
     }
 
+    /**
+     * Vrati index dalsi rotace v poradi.
+     * 
+     * @returns {number}
+     */
     nextRotation() {
         if (this.rotation === this.shapes.length - 1) {
             return 0;
@@ -92,6 +112,9 @@ class Block
         }
     }
 
+    /**
+     *  Zmeni index rotace a zkontroluje, jestli se blok zasekl nebo lze pokracovat ve hre.
+     */
     rotate() {
         if (this.rotation === this.shapes.length - 1) {
             this.rotation = 0;
@@ -101,8 +124,13 @@ class Block
         isBugged();
     }
 
+    /**
+     * Prohodi blok za jiny podle preddefinovane mapy.
+     *
+     * @see possibleSwaps ve sketch.js;
+     */
     swap() {
-        if (!possibleSwaps[this.patternIndex]) {
+        if (possibleSwaps[this.patternIndex] == null) {
              return;
         }
 
@@ -110,6 +138,13 @@ class Block
         this.createShape(patterns[this.patternIndex]);
     }
 
+    /**
+     * Zkontroluje, jestli je mozne blok posunout v danem smeru nebo ho orotovat.
+     *
+     * @param direction
+     * @param rotation
+     * @returns {boolean}
+     */
     check(direction, rotation) {
         isBugged();
         let bX = this.x;
@@ -120,16 +155,15 @@ class Block
         for (let y = 0; y < pattern.length; y++) {
             for (let x = 0; x < pattern[y].length; x++) {
                 if (pattern[y][x] !== 0) {
-                    if (x + bX + direction[0] < 0 || cols - 1 < x + bX + direction[0]) {
-                        return false;
-                    }
-
+                    // Preskocila by v dalsim kroku kosticka pres spodni okraj hraci plochy?
                     if (rows - 1 < y + bY + direction[1]) {
                         return false;
                     }
 
+                    // Prekryl by blok v dalsim kroku jiny blok, nebo okraje hraci plochy?
+                    // Je nova souradnice neco jineho nez prazdne pole?
                     let indexY = (y + bY + direction[1]) < 0 ? 0 : (y + bY + direction[1]);
-                    if (this.board.board[indexY][x + bX + direction[0]] !== 0) {
+                    if (this.board.board[y + bY + direction[1]][x + bX + direction[0]] !== 0) {
                         return false;
                     }
                 }
