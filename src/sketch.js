@@ -61,6 +61,9 @@ function newGame() {
     block = newBlock();
 }
 
+/**
+ * Gameloop
+ */
 function draw() {
     background(240);
 
