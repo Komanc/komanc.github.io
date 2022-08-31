@@ -6,6 +6,7 @@ let cols = 9;
 let rows = 24;
 let blockSize = (window.innerHeight / rows) - 1;
 let patterns;
+let possibleSwaps;
 let offsetScreen = 0;//window.innerWidth / 4;
 
 let pressed = false;
@@ -117,7 +118,6 @@ function draw() {
 }
 
 function keyPressed() {
-    console.info(keyCode);
     if (keyCode === LEFT_ARROW) {
         direction = [-1, 0];
         pressed = true;
