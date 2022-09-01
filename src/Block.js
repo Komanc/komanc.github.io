@@ -127,6 +127,11 @@ class Block
     /**
      * Prohodi blok za jiny podle preddefinovane mapy.
      *
+     * K prohozeni dojde jen v pripade, ze novy blok nevykresli mimo hraci pole.
+     *
+     * Napriklad tvar L se za tvar J nevymeni v pripade, ze je L u leveho okraje nebo klesa podel jinych tvaru
+     * z prave strany.
+     *
      * @see possibleSwaps ve sketch.js;
      */
     swap() {
@@ -135,7 +140,12 @@ class Block
         }
 
         this.patternIndex = possibleSwaps[this.patternIndex];
+        let backupShapes = this.shapes;
         this.createShape(patterns[this.patternIndex]);
+
+        if (!this.check(direction)) {
+             this.shapes = backupShapes;
+        }
     }
 
     /**
